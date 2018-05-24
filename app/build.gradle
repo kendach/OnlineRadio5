@@ -32,4 +32,5 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.google.android.exoplayer:exoplayer:2.8.0'
     implementation 'saschpe.android:exoplayer2-ext-icy:1.0.1'
+    
 }
