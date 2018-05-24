@@ -1,11 +1,13 @@
 package com.domagojkenda.onlineradio;
 
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlayer;
@@ -27,9 +29,9 @@ import com.google.android.exoplayer2.util.Util;
 import saschpe.exoplayer2.ext.icy.IcyHttpDataSourceFactory;
 
 public class MainActivity extends AppCompatActivity {
-    Button b_play;
+    ImageButton b_play_pause;
     TextView textView;
-    IcyHttpData icyHttpData = new IcyHttpData(textView);
+    IcyHttpData icyHttpData;
 
     ExoPlayer player;
 
@@ -89,11 +91,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        b_play = (Button) findViewById(R.id.b_play);
-        b_play.setEnabled(false);
-        b_play.setText("LOADING");
+        b_play_pause = (ImageButton) findViewById(R.id.b_play_pause);
+        b_play_pause.setEnabled(false);
+        b_play_pause.setImageResource(R.drawable.play);
+        //b_play_pause.setText("LOADING");
 
         textView = (TextView) findViewById(R.id.textView);
         textView.setEnabled(true);
@@ -104,19 +108,21 @@ public class MainActivity extends AppCompatActivity {
         // mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         new PlayerTask().execute(RadioConstants.HTTP_STREAM_AAC);
 
-        b_play.setOnClickListener(new View.OnClickListener() {
+        b_play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(started){
                     started = false;
                     // mediaPlayer.pause();
                     player.setPlayWhenReady(false);
-                    b_play.setText("PLAY");
+                    b_play_pause.setImageResource(R.drawable.play);
+                    //b_play_pause.setText("PLAY");
                 } else {
                     started = true;
                     // mediaPlayer.start();
                     player.setPlayWhenReady(true);
-                    b_play.setText("PAUSE");
+                    b_play_pause.setImageResource(R.drawable.pause);
+                    //b_play_pause.setText("PAUSE");
                 }
             }
         });
@@ -128,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         if(started){
             // mediaPlayer.pause();
             player.setPlayWhenReady(true);
+            b_play_pause.setImageResource(R.drawable.pause);
         }
     }
 
@@ -137,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         if (started){
             // mediaPlayer.start();
             player.setPlayWhenReady(true);
+            b_play_pause.setImageResource(R.drawable.pause);
         }
     }
 
@@ -146,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         if (prepared){
             // mediaPlayer.release();
             player.setPlayWhenReady(false);
+            b_play_pause.setImageResource(R.drawable.play);
         }
     }
 
@@ -174,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            b_play.setEnabled(true);
-            b_play.setText("PLAY");
+            b_play_pause.setEnabled(true);
+            //b_play_pause.setText("PLAY");
         }
     }
 

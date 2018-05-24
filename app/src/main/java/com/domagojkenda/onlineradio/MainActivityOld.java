@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -15,7 +16,7 @@ import java.io.IOException;
 
 public class MainActivityOld extends AppCompatActivity {
 
-    Button b_play;
+    ImageButton b_play;
 
     MediaPlayer mediaPlayer;
 
@@ -34,9 +35,9 @@ public class MainActivityOld extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        b_play = (Button) findViewById(R.id.b_play);
+        b_play = (ImageButton) findViewById(R.id.b_play_pause);
         b_play.setEnabled(false);
-        b_play.setText("LOADING");
+        //b_play.setText("LOADING");
 
 
         mediaPlayer = new MediaPlayer();
@@ -49,11 +50,11 @@ public class MainActivityOld extends AppCompatActivity {
                 if(started){
                     started = false;
                     mediaPlayer.pause();
-                    b_play.setText("PLAY");
+                    //b_play.setText("PLAY");
                 } else {
                     started = true;
                     mediaPlayer.start();
-                    b_play.setText("PAUSE");
+                    //b_play.setText("PAUSE");
                 }
             }
         });
@@ -80,7 +81,7 @@ public class MainActivityOld extends AppCompatActivity {
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
             b_play.setEnabled(true);
-            b_play.setText("PLAY");
+            //b_play.setText("PLAY");
         }
     }
 

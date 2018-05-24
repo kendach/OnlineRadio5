@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true"
     tools:context=".MainActivity"
-    android:background="@drawable/background">
+    android:background="@drawable/background"
+    android:screenOrientation="portrait">
 
   <!--  <include layout="@layout/status_bar"/>
    <include android:id="@+id/app_bar" layout="@layout/app_bar"/> -->
@@ -27,22 +28,27 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/imageView" />
 -->
-    <Button
-        android:id="@+id/b_play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/play"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.578" />
+  <ImageButton
+      android:id="@+id/b_play_pause"
+      android:layout_width="102dp"
+      android:layout_height="93dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:adjustViewBounds="false"
+      android:scaleType="fitCenter"
+      android:background="@null"
+
+      android:text="@string/play"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.501"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.609" />
 
   <ImageView
       android:id="@+id/imageView"
@@ -53,19 +59,6 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:srcCompat="@drawable/radiostudent_logo" />
-
-  <SeekBar
-      android:id="@+id/seekBar3"
-      android:layout_width="214dp"
-      android:layout_height="35dp"
-      android:layout_marginBottom="52dp"
-      android:layout_marginEnd="8dp"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="8dp"
-      android:layout_marginStart="8dp"
-      app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent" />
 
   <android.support.design.widget.BottomNavigationView
       android:id="@+id/bottomNavigationView"
@@ -82,14 +75,89 @@
 
   <TextView
       android:id="@+id/textView"
-      android:layout_width="225dp"
-      android:layout_height="84dp"
-      android:text="TextView"
-      android:textColor="@android:color/holo_blue_bright"
+      android:layout_width="273dp"
+      android:layout_height="45dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:text="Loading"
+      android:textColor="@color/exo_edit_mode_background_color"
+      android:textSize="18sp"
+      android:textStyle="bold"
       android:visibility="visible"
-      tools:layout_editor_absoluteX="80dp"
-      tools:layout_editor_absoluteY="168dp"
-      tools:text="burek" /><![CDATA[
+      app:fontFamily="monospace"
+      app:layout_constraintBottom_toTopOf="@+id/b_play_pause"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.505"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/imageView"
+      app:layout_constraintVertical_bias="0.685" />
+
+  <TextView
+      android:id="@+id/textView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="8dp"
+      android:text="UPRAVO SVIRA:"
+      android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+      android:textColor="@color/exo_edit_mode_background_color"
+      android:textSize="18sp"
+      android:textStyle="bold"
+      app:fontFamily="monospace"
+      app:layout_constraintBottom_toTopOf="@+id/textView"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.09"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/imageView"
+      app:layout_constraintVertical_bias="0.725"
+      tools:text="UPRAVO SVIRA: " />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="35dp"
+        android:layout_height="34dp"
+        android:layout_marginBottom="76dp"
+        android:layout_marginLeft="208dp"
+        android:layout_marginStart="208dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="36dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="76dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="40dp"
+        android:layout_height="34dp"
+        android:layout_marginBottom="76dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.28"
+        app:layout_constraintStart_toEndOf="@+id/imageButton3"
+        app:srcCompat="@mipmap/ic_launcher_round" /><![CDATA[
+
+
 
 
 
@@ -102,6 +170,7 @@
     "
         tools:layout_editor_absoluteX="112dp"
         tools:layout_editor_absoluteY="227dp" />
+
 
 
 
