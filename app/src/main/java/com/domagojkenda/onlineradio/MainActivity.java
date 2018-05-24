@@ -1,7 +1,5 @@
 package com.domagojkenda.onlineradio;
 
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +10,6 @@ import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -21,34 +18,27 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import java.io.IOException;
-
-import saschpe.exoplayer2.ext.icy.IcyHttpDataSource;
 import saschpe.exoplayer2.ext.icy.IcyHttpDataSourceFactory;
 
 public class MainActivity extends AppCompatActivity {
-
     Button b_play;
     TextView textView;
+    IcyHttpData icyHttpData = new IcyHttpData(textView);
 
     ExoPlayer player;
 
     boolean prepared = false;
     boolean started = false;
 
-    String stream = "http://161.53.122.184:8000/aacPlus48.aac";
     private DataSource.Factory dataSourceFactory;
     private ExtractorsFactory extractorsFactory;
     private IcyHttpDataSourceFactory icyHttpDataSourceFactory;
-    // "http://144.217.153.67/live?icy=http";
-    // http://161.53.122.184:8000/aacPlus48.aac
 
 
     /*
@@ -60,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     */
 
     private void initializePlayer() {
+        icyHttpData = new IcyHttpData(textView);
+
         // Create a default TrackSelector
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
@@ -78,34 +70,20 @@ public class MainActivity extends AppCompatActivity {
 
         // Produces DataSource instances through which media data is loaded.
         String userAgent = Util.getUserAgent(
-                this, "RadioStudentExoplayer");
+                this, RadioConstants.APPLICATION_NAME);
         dataSourceFactory = new DefaultDataSourceFactory(this, userAgent);
 
         // Dodano za: ExoPlayer2 Shoutcast Metadata Protocol (ICY) extension
 
         // Custom HTTP data source factory which requests Icy metadata and parses it if
         // the stream server supports it
-        // Log.d("XXX", "onIcyHeaders: %s".format(icyHeaders.toString()))
         icyHttpDataSourceFactory = new IcyHttpDataSourceFactory.Builder(userAgent)
-                .setIcyHeadersListener(this::iceHeader)
-                .setIcyMetadataChangeListener(this::icyMetadata)
+                .setIcyHeadersListener(icyHttpData::iceHeader)
+                .setIcyMetadataChangeListener(icyHttpData::icyMetadata)
                 .build();
 
         // Produces Extractor instances for parsing the media data.
         extractorsFactory = new DefaultExtractorsFactory();
-    }
-
-    private void iceHeader(IcyHttpDataSource.IcyHeaders icyHeaders)
-    {
-        // Log.d("XXX", "onIcyHeaders: %s".format(icyHeaders.toString()))
-        System.out.println("onIcyHeaders: %s".format(icyHeaders.toString()));
-        textView.setText(icyHeaders.toString());
-    }
-
-    private void icyMetadata(IcyHttpDataSource.IcyMetadata icyMetadata)
-    {
-        System.out.println("onIcyMetaData: %s".format(icyMetadata.toString()));
-        textView.setText(icyMetadata.toString());
     }
 
     @Override
@@ -119,13 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.textView);
         textView.setEnabled(true);
-        textView.setText(" ... loading ...");
 
         initializePlayer();
 
         // mediaPlayer = new MediaPlayer();
         // mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        new PlayerTask().execute(stream);
+        new PlayerTask().execute(RadioConstants.HTTP_STREAM_AAC);
 
         b_play.setOnClickListener(new View.OnClickListener() {
             @Override
