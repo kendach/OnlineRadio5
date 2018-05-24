@@ -1,48 +1,73 @@
 package com.domagojkenda.onlineradio;
 
 import android.util.Log;
-import android.widget.TextView;
 
 import saschpe.exoplayer2.ext.icy.IcyHttpDataSource;
-import saschpe.exoplayer2.ext.icy.IcyHttpDataSourceFactory;
 
 public class IcyHttpData {
+    private final MyConsumer<String> consumer;
     private IcyHttpDataSource.IcyHeaders icyHeaders;
     private IcyHttpDataSource.IcyMetadata icyMetadata;
-    private TextView textView;
+    private String streamTitle = "";
+    private final StringBuilder streamTitles;
 
-    public IcyHttpData(TextView textView) {
-        this.textView = textView;
+    public IcyHttpData(MyConsumer<String> consumer) {
+        this.consumer = consumer;
+        streamTitles = new StringBuilder();
     }
+
 
     public void iceHeader(IcyHttpDataSource.IcyHeaders icyHeaders)
     {
         this.icyHeaders = icyHeaders;
-        Log.d("XXX", "onIcyHeaders: %s".format(icyHeaders.toString()));
-        System.out.println("onIcyHeaders: %s".format(icyHeaders.toString()));
-        setTextViewText();
+        Log.d("XXX", String.format(icyHeaders.toString()));
+        acceptStremTitle();
     }
+
 
     public void icyMetadata(IcyHttpDataSource.IcyMetadata icyMetadata)
     {
-        this.icyMetadata = icyMetadata;;
-        System.out.println("onIcyMetaData: %s".format(icyMetadata.toString()));
-        setTextViewText();
+        this.icyMetadata = icyMetadata;
+        Log.d("XXX", String.format(icyMetadata.toString()));
+        acceptStremTitle();
     }
 
-    private void setTextViewText()
+
+    private void acceptStremTitle()
     {
-        if (textView == null) return;
-        textView.setText("");
+        setStreamTitle();
+        if (consumer != null)
+        {
+            consumer.accept(streamTitle);
+        }
+    }
+
+    private void setStreamTitle()
+    {
         if (icyMetadata != null)
         {
-            textView.setText(icyMetadata.getStreamTitle());
+            streamTitle = icyMetadata.getStreamTitle();
+            insertStreamTitle(streamTitle);
+            icyMetadata = null;
             return;
         }
         if (icyHeaders != null)
         {
-            textView.setText(icyHeaders.getName());
-            return;
+            streamTitle = icyHeaders.getName();
         }
+    }
+
+
+    private void insertStreamTitle(String s)
+    {
+        if (streamTitles.length() > 0 ) streamTitles.insert(0, '\n');
+        streamTitles.insert(0, s);
+        Log.d("StreamTitles", String.format(streamTitles()));
+    }
+
+
+    public String streamTitles()
+    {
+        return streamTitles.toString();
     }
 }

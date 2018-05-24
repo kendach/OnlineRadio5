@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     */
 
     private void initializePlayer() {
-        icyHttpData = new IcyHttpData(textView);
+        icyHttpData = new IcyHttpData(s -> textView.setText(s));
 
         // Create a default TrackSelector
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -94,12 +94,12 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
-        b_play_pause = (ImageButton) findViewById(R.id.b_play_pause);
+        b_play_pause = findViewById(R.id.b_play_pause);
         b_play_pause.setEnabled(false);
         b_play_pause.setImageResource(R.drawable.play);
         //b_play_pause.setText("LOADING");
 
-        textView = (TextView) findViewById(R.id.textView);
+        textView = findViewById(R.id.textView);
         textView.setEnabled(true);
 
         initializePlayer();
