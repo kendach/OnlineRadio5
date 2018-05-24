@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -29,9 +30,13 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.io.IOException;
 
+import saschpe.exoplayer2.ext.icy.IcyHttpDataSource;
+import saschpe.exoplayer2.ext.icy.IcyHttpDataSourceFactory;
+
 public class MainActivity extends AppCompatActivity {
 
     Button b_play;
+    TextView textView;
 
     ExoPlayer player;
 
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     String stream = "http://161.53.122.184:8000/aacPlus48.aac";
     private DataSource.Factory dataSourceFactory;
     private ExtractorsFactory extractorsFactory;
+    private IcyHttpDataSourceFactory icyHttpDataSourceFactory;
     // "http://144.217.153.67/live?icy=http";
     // http://161.53.122.184:8000/aacPlus48.aac
 
@@ -69,13 +75,37 @@ public class MainActivity extends AppCompatActivity {
         SimpleExoPlayerView simpleExoPlayerView = findViewById(R.id.exoplayer);
         simpleExoPlayerView.setPlayer(player);
         */
+
         // Produces DataSource instances through which media data is loaded.
-        dataSourceFactory = new DefaultDataSourceFactory(this, Util.getUserAgent(
-                this, "RadioStudentExoplayer"));
+        String userAgent = Util.getUserAgent(
+                this, "RadioStudentExoplayer");
+        dataSourceFactory = new DefaultDataSourceFactory(this, userAgent);
+
+        // Dodano za: ExoPlayer2 Shoutcast Metadata Protocol (ICY) extension
+
+        // Custom HTTP data source factory which requests Icy metadata and parses it if
+        // the stream server supports it
+        // Log.d("XXX", "onIcyHeaders: %s".format(icyHeaders.toString()))
+        icyHttpDataSourceFactory = new IcyHttpDataSourceFactory.Builder(userAgent)
+                .setIcyHeadersListener(this::iceHeader)
+                .setIcyMetadataChangeListener(this::icyMetadata)
+                .build();
 
         // Produces Extractor instances for parsing the media data.
         extractorsFactory = new DefaultExtractorsFactory();
+    }
 
+    private void iceHeader(IcyHttpDataSource.IcyHeaders icyHeaders)
+    {
+        // Log.d("XXX", "onIcyHeaders: %s".format(icyHeaders.toString()))
+        System.out.println("onIcyHeaders: %s".format(icyHeaders.toString()));
+        textView.setText(icyHeaders.toString());
+    }
+
+    private void icyMetadata(IcyHttpDataSource.IcyMetadata icyMetadata)
+    {
+        System.out.println("onIcyMetaData: %s".format(icyMetadata.toString()));
+        textView.setText(icyMetadata.toString());
     }
 
     @Override
@@ -86,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
         b_play = (Button) findViewById(R.id.b_play);
         b_play.setEnabled(false);
         b_play.setText("LOADING");
+
+        textView = (TextView) findViewById(R.id.textView);
+        textView.setEnabled(true);
+        textView.setText(" ... loading ...");
 
         initializePlayer();
 
@@ -149,7 +183,10 @@ public class MainActivity extends AppCompatActivity {
             // This is the MediaSource representing the media to be played.
             Uri videoUri = Uri.parse(strings[0]);
             MediaSource videoSource = new ExtractorMediaSource(videoUri,
-                    dataSourceFactory, extractorsFactory, null, null);
+                    // dataSourceFactory,
+                    icyHttpDataSourceFactory,
+                    extractorsFactory,
+                    null, null);
 
             // Prepare the player with the source.
             player.prepare(videoSource);
