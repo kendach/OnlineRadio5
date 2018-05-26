@@ -1,11 +1,16 @@
 package com.domagojkenda.onlineradio;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -30,10 +35,15 @@ import saschpe.exoplayer2.ext.icy.IcyHttpDataSourceFactory;
 
 public class MainActivity extends AppCompatActivity {
     ImageButton b_play_pause;
+    ImageButton imageButton1;
+    ImageButton imageButton2;
+    ImageButton imageButton3;
+
     TextView textView;
     IcyHttpData icyHttpData;
-
     ExoPlayer player;
+
+
 
     boolean prepared = false;
     boolean started = false;
@@ -41,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     private DataSource.Factory dataSourceFactory;
     private ExtractorsFactory extractorsFactory;
     private IcyHttpDataSourceFactory icyHttpDataSourceFactory;
-
 
     /*
     @Override
@@ -102,6 +111,20 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         textView.setEnabled(true);
 
+        imageButton1 = findViewById(R.id.imageButton1);
+        imageButton1.setImageResource(R.drawable.facebooklogo);
+
+        imageButton2 = findViewById(R.id.imageButton2);
+        imageButton2.setImageResource(R.drawable.instagramlogo);
+
+        imageButton3 = findViewById(R.id.imageButton3);
+        imageButton3.setImageResource(R.drawable.soundcloudlogo);
+
+       // WebView webView = (WebView) findViewById(R.id.web_view);
+
+        //Novo - proba sa image butonnima
+
+
         initializePlayer();
 
         // mediaPlayer = new MediaPlayer();
@@ -126,7 +149,40 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        imageButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/RadioStudentZG/"));
+            startActivity(intent);
+            }
+        });
+
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/radiostudentzg"));
+                startActivity(intent);
+            }
+        });
+
+        imageButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.mixcloud.com/RadioStudent/stream/"));
+                startActivity(intent);
+            }
+        });
+
     }
+
+
+//Novo - proba sa image butonnima
+
+  //  public void imageButton1 (View view){
+   //     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+   //     startActivity(browserIntent);
+  //  }
+
 
     @Override
     protected void onPause() {
